@@ -1,0 +1,7 @@
+{
+  "name": "Apprendre le Russe",
+  "description": "Une application interactive pour apprendre le vocabulaire russe de base avec des flashcards et des quiz, utilisant l'IA pour enrichir l'apprentissage.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
