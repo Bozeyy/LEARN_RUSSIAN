@@ -1,10 +1,9 @@
-
 import React, { useState, useMemo } from 'react';
 import { INITIAL_WORDS } from './constants';
 import { AppStep, Activity, Category, Direction, RussianWord } from './types';
 import Flashcard from './components/Flashcard';
 import Quiz from './components/Quiz';
-import { getWordExplanation } from './services/geminiService';
+// import { getWordExplanation } from './services/geminiService';
 
 const App: React.FC = () => {
   const [step, setStep] = useState<AppStep>('select-activity');
@@ -15,8 +14,8 @@ const App: React.FC = () => {
   const [direction, setDirection] = useState<Direction>('RU_FR');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [quizScore, setQuizScore] = useState<number | null>(null);
-  const [aiExplanation, setAiExplanation] = useState<string | null>(null);
-  const [isAiLoading, setIsAiLoading] = useState(false);
+  // const [aiExplanation, setAiExplanation] = useState<string | null>(null);
+  // const [isAiLoading, setIsAiLoading] = useState(false);
 
   // Filtrage et sélection des mots
   const currentSelection = useMemo(() => {
@@ -41,29 +40,17 @@ const App: React.FC = () => {
     setStep('select-activity');
     setQuizScore(null);
     setCurrentIndex(0);
-    setAiExplanation(null);
+    // setAiExplanation(null);
   };
 
   const handleNextWord = () => {
     setCurrentIndex((prev) => (prev + 1) % currentSelection.length);
-    setAiExplanation(null);
+    // setAiExplanation(null);
   };
 
   const handlePrevWord = () => {
     setCurrentIndex((prev) => (prev - 1 + currentSelection.length) % currentSelection.length);
-    setAiExplanation(null);
-  };
-
-  const askGemini = async () => {
-    if (!currentWord) return;
-    setIsAiLoading(true);
-    const expl = await getWordExplanation(currentWord.russian, currentWord.category);
-    setAiExplanation(expl);
-    setIsAiLoading(false);
-  };
-
-  const toggleDirection = () => {
-    setDirection(prev => prev === 'RU_FR' ? 'FR_RU' : 'RU_FR');
+    // setAiExplanation(null);
   };
 
   // --- ECRAN 1: ACTIVITE ---
