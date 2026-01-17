@@ -7,6 +7,13 @@
     <title>Apprendre le Russe</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      // Polyfill simple pour 'process' afin d'éviter les erreurs ReferenceError dans le navigateur
+      // lors de l'accès à process.env.API_KEY injecté par Railway/Vite.
+      if (typeof window.process === 'undefined') {
+        window.process = { env: {} };
+      }
+    </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -30,9 +37,9 @@
 {
   "imports": {
     "@google/genai": "https://esm.sh/@google/genai@^1.37.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3"
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
   }
 }
 </script>
