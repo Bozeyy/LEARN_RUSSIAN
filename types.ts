@@ -4,13 +4,13 @@ export interface RussianWord {
   russian: string;
   french: string;
   phonetic: string;
-  category: 'verbs' | 'nouns' | 'numbers';
+  category: 'verbs' | 'nouns' | 'numbers' | 'glu';
   example?: string;
 }
 
 export type AppStep = 'select-activity' | 'select-category' | 'select-range' | 'game';
 export type Activity = 'flashcards' | 'quiz';
-export type Category = 'verbs' | 'nouns' | 'numbers' | 'both';
+export type Category = 'verbs' | 'nouns' | 'numbers' | 'glu' | 'both';
 export type Direction = 'RU_FR' | 'FR_RU';
 
 export interface QuizQuestion {
