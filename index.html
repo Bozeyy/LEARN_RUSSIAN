@@ -7,13 +7,6 @@
     <title>Apprendre le Russe</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-      /** 
-       * Polyfill immédiat pour 'process' 
-       * Indispensable pour les applications React/Vite qui accèdent à process.env en dehors du build.
-       */
-      window.process = window.process || { env: { NODE_ENV: 'production' } };
-    </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -34,7 +27,6 @@
         .backface-hidden {
             backface-visibility: hidden;
         }
-        /* Assurer que le root occupe tout l'écran pour éviter les flashs blancs */
         #root {
             min-height: 100vh;
         }
@@ -42,10 +34,9 @@
 <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
-    "@google/genai": "https://esm.sh/@google/genai@^1.37.0"
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
   }
 }
 </script>
