@@ -16,11 +16,15 @@ const Quiz: React.FC<QuizProps> = ({ words, direction, onComplete }) => {
   const [isAnswered, setIsAnswered] = useState(false);
 
   useEffect(() => {
-    const quizQuestions: QuizQuestion[] = words.map((word) => {
+    // Shuffle the source words for the quiz session
+    const shuffledWords = [...words].sort(() => Math.random() - 0.5);
+    
+    const quizQuestions: QuizQuestion[] = shuffledWords.map((word) => {
       const isRUFR = direction === 'RU_FR';
       const correctAnswer = isRUFR ? word.french : word.russian;
       
-      // Get 3 random distractors
+      // Get 3 random distractors from the entire pool (to be more challenging)
+      // Here we limit to the current set words for simplicity
       const otherWords = words.filter(w => w.id !== word.id);
       const shuffledOthers = [...otherWords].sort(() => 0.5 - Math.random());
       const distractors = shuffledOthers.slice(0, 3).map(w => isRUFR ? w.french : w.russian);
@@ -59,29 +63,38 @@ const Quiz: React.FC<QuizProps> = ({ words, direction, onComplete }) => {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      {/* Progress Bar */}
-      <div className="w-full h-2 bg-gray-200 rounded-full mb-8 overflow-hidden">
+      {/* Progress Bar Neo-Brutalist */}
+      <div className="w-full h-8 bg-white border-4 border-black mb-8 overflow-hidden nb-shadow-sm relative">
         <div 
-          className="h-full bg-blue-600 transition-all duration-300"
+          className="h-full bg-[#F4E04D] border-r-4 border-black transition-all duration-300"
           style={{ width: `${progress}%` }}
         />
+        <div className="absolute inset-0 flex items-center justify-center font-black text-xs mix-blend-difference">
+           {currentIndex + 1} / {questions.length}
+        </div>
       </div>
 
-      <div className="bg-white p-6 rounded-3xl shadow-lg border border-gray-100 mb-6">
-        <h3 className="text-sm font-semibold text-gray-400 uppercase mb-4 text-center">
-          Question {currentIndex + 1} / {questions.length}
+      <div className="bg-white p-6 nb-border nb-shadow mb-8 rotate-1">
+        <h3 className="text-xs font-black text-black uppercase mb-4 text-center tracking-tighter">
+          QUESTION SUIVANTE !
         </h3>
-        <p className="text-3xl font-bold text-center text-gray-800 mb-8">
+        <p className="text-5xl font-black text-center text-black mb-10 uppercase break-words leading-none">
           {direction === 'RU_FR' ? currentQ.word.russian : currentQ.word.french}
         </p>
 
-        <div className="space-y-3">
+        <div className="space-y-4">
           {currentQ.options.map((option, idx) => {
-            let bgColor = "bg-gray-50 border-gray-100 hover:border-blue-400";
+            let bgColor = "bg-white hover:bg-[#A2D2FF]";
+            let textColor = "text-black";
+            
             if (isAnswered) {
-              if (option === currentQ.correctAnswer) bgColor = "bg-green-100 border-green-500 text-green-700";
-              else if (option === selectedOption) bgColor = "bg-red-100 border-red-500 text-red-700";
-              else bgColor = "bg-gray-50 border-gray-100 opacity-50";
+              if (option === currentQ.correctAnswer) {
+                bgColor = "bg-[#4D96FF] text-white";
+              } else if (option === selectedOption) {
+                bgColor = "bg-[#FF6B6B] text-white";
+              } else {
+                bgColor = "bg-white opacity-40";
+              }
             }
 
             return (
@@ -89,7 +102,7 @@ const Quiz: React.FC<QuizProps> = ({ words, direction, onComplete }) => {
                 key={idx}
                 onClick={() => handleOptionClick(option)}
                 disabled={isAnswered}
-                className={`w-full p-4 text-left rounded-2xl border-2 transition-all font-medium ${bgColor}`}
+                className={`w-full p-4 text-left nb-border nb-shadow-sm transition-all font-black text-xl nb-press uppercase ${bgColor} ${textColor}`}
               >
                 {option}
               </button>
@@ -101,9 +114,9 @@ const Quiz: React.FC<QuizProps> = ({ words, direction, onComplete }) => {
       {isAnswered && (
         <button
           onClick={handleNext}
-          className="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-lg hover:bg-blue-700 transition-colors"
+          className="w-full py-5 bg-black text-white nb-border nb-shadow font-black text-2xl nb-press uppercase animate-bounce"
         >
-          {currentIndex === questions.length - 1 ? 'Voir le score' : 'Question suivante'}
+          {currentIndex === questions.length - 1 ? 'VOIR SCORE !' : 'SUIVANT →'}
         </button>
       )}
     </div>

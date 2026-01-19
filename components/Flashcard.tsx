@@ -20,29 +20,31 @@ const Flashcard: React.FC<FlashcardProps> = ({ word, direction }) => {
 
   return (
     <div 
-      className="relative w-full h-80 perspective-1000 cursor-pointer mb-6"
+      className="relative w-full h-96 perspective-1000 cursor-pointer"
       onClick={() => setIsFlipped(!isFlipped)}
     >
       <div className={`relative w-full h-full transition-transform duration-500 preserve-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
         {/* Front */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-white rounded-3xl shadow-xl border border-blue-100 backface-hidden">
-          <span className="text-sm font-medium text-blue-500 uppercase tracking-wider mb-4">
-            {direction === 'RU_FR' ? 'Russe' : 'Français'}
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-white nb-border nb-shadow backface-hidden">
+          <span className="bg-[#4D96FF] px-4 py-1 text-sm font-black text-white uppercase border-2 border-black mb-6">
+            {direction === 'RU_FR' ? 'RUSSE' : 'FRANÇAIS'}
           </span>
-          <h2 className="text-5xl font-bold text-gray-800 text-center">{primary}</h2>
-          <p className="mt-8 text-sm text-gray-400">Cliquez pour voir la réponse</p>
+          <h2 className="text-6xl font-black text-black text-center break-words w-full uppercase leading-none">{primary}</h2>
+          <div className="mt-12 bg-[#F4E04D] px-4 py-2 nb-border text-sm font-black italic">CLIQUE ICI POUR LA TRADUCTION !</div>
         </div>
 
         {/* Back */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-blue-50 rounded-3xl shadow-xl border border-blue-200 rotate-y-180 backface-hidden">
-          <span className="text-sm font-medium text-blue-600 uppercase tracking-wider mb-4">
-            Réponse
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-[#A2D2FF] nb-border nb-shadow rotate-y-180 backface-hidden">
+          <span className="bg-black px-4 py-1 text-sm font-black text-white uppercase border-2 border-black mb-6">
+            TRADUCTION
           </span>
-          <h2 className="text-4xl font-bold text-gray-800 text-center mb-2">{secondary}</h2>
-          <p className="text-xl text-blue-600 font-medium italic">[{phonetic}]</p>
+          <h2 className="text-5xl font-black text-black text-center mb-4 uppercase">{secondary}</h2>
+          <div className="bg-white nb-border px-4 py-2 font-black text-2xl text-[#FF6B6B]">
+            [{phonetic}]
+          </div>
           {word.example && (
-            <div className="mt-6 p-3 bg-white/50 rounded-xl text-center">
-              <p className="text-sm text-gray-600 italic">"{word.example}"</p>
+            <div className="mt-8 p-4 bg-white border-4 border-black border-dashed">
+              <p className="text-lg text-black font-bold italic">"{word.example}"</p>
             </div>
           )}
         </div>
