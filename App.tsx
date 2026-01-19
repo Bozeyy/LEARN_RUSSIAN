@@ -32,13 +32,15 @@ const App: React.FC = () => {
       base = base.filter(w => w.category === 'verbs');
     } else if (category === 'nouns') {
       base = base.filter(w => w.category === 'nouns');
+    } else if (category === 'numbers') {
+      base = base.filter(w => w.category === 'numbers');
     }
     
     const start = rangeIndex * 10;
     const end = start + 10;
     const sliced = base.slice(start, end);
-    return shuffle(sliced); // Mélange ici !
-  }, [category, rangeIndex, step]); // Re-shuffle quand on retourne au jeu
+    return shuffle(sliced); // Toujours aléatoire !
+  }, [category, rangeIndex, step]);
 
   const currentWord = currentSelection[currentIndex];
 
@@ -99,14 +101,17 @@ const App: React.FC = () => {
         </button>
         <h2 className="text-4xl font-black text-black mb-12 text-center uppercase -rotate-1 bg-white nb-border p-2">Catégorie ?</h2>
         <div className="w-full max-w-sm space-y-4">
-          <button onClick={() => { setCategory('verbs'); setStep('select-range'); }} className="w-full p-6 bg-white nb-border nb-shadow font-black text-2xl text-black nb-press text-left flex justify-between items-center">
-            <span>VERBES</span> <span className="bg-[#FF6B6B] p-2 text-sm text-white border-2 border-black">50</span>
+          <button onClick={() => { setCategory('verbs'); setStep('select-range'); }} className="w-full p-4 bg-white nb-border nb-shadow font-black text-xl text-black nb-press text-left flex justify-between items-center">
+            <span>VERBES</span> <span className="bg-[#FF6B6B] p-2 text-xs text-white border-2 border-black">50</span>
           </button>
-          <button onClick={() => { setCategory('nouns'); setStep('select-range'); }} className="w-full p-6 bg-white nb-border nb-shadow font-black text-2xl text-black nb-press text-left flex justify-between items-center">
-            <span>NOMS</span> <span className="bg-[#4D96FF] p-2 text-sm text-white border-2 border-black">50</span>
+          <button onClick={() => { setCategory('nouns'); setStep('select-range'); }} className="w-full p-4 bg-white nb-border nb-shadow font-black text-xl text-black nb-press text-left flex justify-between items-center">
+            <span>NOMS</span> <span className="bg-[#4D96FF] p-2 text-xs text-white border-2 border-black">50</span>
           </button>
-          <button onClick={() => { setCategory('both'); setStep('select-range'); }} className="w-full p-6 bg-[#F4E04D] nb-border nb-shadow font-black text-2xl text-black nb-press text-left flex justify-between items-center">
-            <span>MIXTE</span> <span className="bg-black p-2 text-sm text-white border-2 border-black">100</span>
+          <button onClick={() => { setCategory('numbers'); setStep('select-range'); }} className="w-full p-4 bg-[#A2D2FF] nb-border nb-shadow font-black text-xl text-black nb-press text-left flex justify-between items-center">
+            <span>CHIFFRES</span> <span className="bg-white p-2 text-xs text-black border-2 border-black">30</span>
+          </button>
+          <button onClick={() => { setCategory('both'); setStep('select-range'); }} className="w-full p-4 bg-[#F4E04D] nb-border nb-shadow font-black text-xl text-black nb-press text-left flex justify-between items-center">
+            <span>MIXTE</span> <span className="bg-black p-2 text-xs text-white border-2 border-black">130</span>
           </button>
         </div>
       </div>
@@ -114,7 +119,14 @@ const App: React.FC = () => {
   }
 
   if (step === 'select-range') {
-    const ranges = ["1 - 10", "11 - 20", "21 - 30", "31 - 40", "41 - 50"];
+    // Calcul dynamiquement le nombre de packs selon la catégorie
+    const count = INITIAL_WORDS.filter(w => {
+      if (category === 'both') return true;
+      return w.category === category;
+    }).length;
+    const numPacks = Math.ceil(count / 10);
+    const ranges = Array.from({length: numPacks}, (_, i) => `${i*10 + 1} - ${Math.min((i+1)*10, count)}`);
+
     return (
       <div className="min-h-screen flex flex-col p-6 items-center justify-center">
         <button onClick={() => setStep('select-category')} className="absolute top-6 left-6 bg-white nb-border nb-shadow-sm px-4 py-2 font-black text-black nb-press">
@@ -150,7 +162,7 @@ const App: React.FC = () => {
         </button>
         <div className="flex flex-col items-center bg-white nb-border px-4 py-1 rotate-1">
             <span className="text-xs font-black text-black uppercase tracking-tighter">
-              {category === 'both' ? 'MIX' : category === 'verbs' ? 'VERBES' : 'NOMS'}
+              {category === 'both' ? 'MIX' : category === 'verbs' ? 'VERBES' : category === 'nouns' ? 'NOMS' : 'CHIFFRES'}
             </span>
             <span className="font-black text-black text-lg leading-tight">{activity === 'flashcards' ? 'CARTES' : 'QUIZ'}</span>
         </div>
@@ -204,8 +216,6 @@ const App: React.FC = () => {
                   onClick={() => {
                     setQuizScore(null);
                     setCurrentIndex(0);
-                    // Force re-shuffle indirectly by resetting step or logic if needed, 
-                    // but Quiz component shuffles internally on mount too.
                   }}
                   className="w-full py-4 bg-[#FF6B6B] text-white nb-border nb-shadow font-black text-xl nb-press uppercase"
                 >
